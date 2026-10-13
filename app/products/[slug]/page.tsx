@@ -6,7 +6,7 @@ import { products } from "@/data/products";
 import { siteConfig } from "@/data/site";
 
 export async function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  return products.map((p: any) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -15,7 +15,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = products.find((p) => p.slug === slug);
+  const product = products.find((p: any) => p.slug === slug);
   if (!product) return { title: "Product Not Found" };
   return {
     title: product.name,
@@ -29,13 +29,9 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = products.find((p) => p.slug === slug);
+  const product = products.find((p: any) => p.slug === slug);
 
   if (!product) notFound();
-
-  const category = product.category
-    ? siteConfig.categories?.find((c) => c.slug === product.category)
-    : null;
 
   const whatsappLink = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
     `Hi, I'm interested in ${product.name}`
@@ -72,14 +68,6 @@ export default async function ProductPage({
 
           {/* Info */}
           <div>
-            {category && (
-              <Link
-                href={`/categories/${category.slug}`}
-                className="text-xs font-semibold uppercase tracking-widest text-[#d4a017] hover:underline"
-              >
-                {category.name}
-              </Link>
-            )}
             <h1 className="mt-3 font-serif text-3xl font-bold text-[#0a1a38] sm:text-4xl">
               {product.name}
             </h1>
